@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "terminal-kit": "^3.0.1"
+  },
+  "name": "music_selector",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

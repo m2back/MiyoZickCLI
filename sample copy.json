@@ -1,0 +1,13 @@
+{
+  "/home/m2back/tmp/forfar/music_selector/music/": {
+    "1.mp3": {
+      "fav": false
+    },
+    "2.mp3": {
+      "fav": true
+    },
+    "25 Band.mp3": {
+      "fav": false
+    }
+  }
+}
