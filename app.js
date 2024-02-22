@@ -75,72 +75,71 @@ const searchMusic = (address, input) => {
   return filtered;
 };
 
-
 /* -------------------------------------Menus-------------------------------------*/
-const selectedSongMenu = (address,file,list) => {
+const selectedSongMenu = (address, file, list) => {
   const songMenu = ["Play Song", "Add to favorites", "Back to Main Menu"];
-  term.singleColumnMenu(songMenu,{cancelable:true},(error,response) => {
+  term.singleColumnMenu(songMenu, { cancelable: true }, (error, response) => {
     if (response.selectedIndex === 0) {
       openFile(`${address}/${file}`);
-    }else if (response.selectedIndex === 1){
-      favChange(address,file);
-    }else if(response.selectedIndex === 2) {
-      mainMenu(address,list);
-    }else{
-      process.exit();
-    }
-  })
-}
-
-const listSongsMenu = (address,list) => {
-  term.singleColumnMenu(list,{cancelable:true},(error, response) => {
-    if (response.selectedIndex !== undefined) selectedSongMenu (address, list[response.selectedIndex],list);
-    else process.exit();
-  })
-}
-
-const listFavSongMenu = (address,list) => {
-  var faveList = favRead(address,list);
-  term.singleColumnMenu(faveList,{cancelable:true},(error,response) => {
-    if (response.selectedIndex !== undefined) selectedSongMenu(address, faveList[response.selectedIndex],list);
-    else process.exit();
-  })
-}
-
-
-const mainMenu = (address,list) => {
-  const menu = ["Show Song List", "Show Favorite Songs", "Serach Songs", "Exit"];
-  term.singleColumnMenu(menu, {cancelable:true}, (error,response)=> {
-    if (response.selectedIndex === 0) listSongsMenu(address,list);
-    else if (response.selectedIndex === 1) listFavSongMenu(address,list);
-    else if (response.selectedIndex === 2) searchMenu(address)  //Search
-    else if (response.selectedIndex === 3) process.exit();
-    else process.exit()
-  })
-}
-
-
-const searchMenu = (address) => {
-  term.green("Write your search term:")
-  term.inputField({cancelable:true},(error, input) => {
-    if (input !== undefined){
-      const searchResult = searchMusic(address,input);
-      console.log(searchResult);
-      listSongsMenu(address,searchResult)
-    }else{
+    } else if (response.selectedIndex === 1) {
+      favChange(address, file);
+    } else if (response.selectedIndex === 2) {
+      mainMenu(address, list);
+    } else {
       process.exit();
     }
   });
-}
+};
 
+const listSongsMenu = (address, list) => {
+  term.singleColumnMenu(list, { cancelable: true }, (error, response) => {
+    if (response.selectedIndex !== undefined)
+      selectedSongMenu(address, list[response.selectedIndex], list);
+    else process.exit();
+  });
+};
 
+const listFavSongMenu = (address, list) => {
+  var faveList = favRead(address, list);
+  term.singleColumnMenu(faveList, { cancelable: true }, (error, response) => {
+    if (response.selectedIndex !== undefined)
+      selectedSongMenu(address, faveList[response.selectedIndex], list);
+    else process.exit();
+  });
+};
+
+const mainMenu = (address, list) => {
+  const menu = [
+    "Show Song List",
+    "Show Favorite Songs",
+    "Serach Songs",
+    "Exit",
+  ];
+  term.singleColumnMenu(menu, { cancelable: true }, (error, response) => {
+    if (response.selectedIndex === 0) listSongsMenu(address, list);
+    else if (response.selectedIndex === 1) listFavSongMenu(address, list);
+    else if (response.selectedIndex === 2) searchMenu(address); //Search
+    else if (response.selectedIndex === 3) process.exit();
+    else process.exit();
+  });
+};
+
+const searchMenu = (address) => {
+  term.green("Write your search term:");
+  term.inputField({ cancelable: true }, (error, input) => {
+    if (input !== undefined) {
+      const searchResult = searchMusic(address, input);
+      console.log(searchResult);
+      listSongsMenu(address, searchResult);
+    } else {
+      process.exit();
+    }
+  });
+};
 
 // term( 'Please enter your name: ' ) ;
 
-
-
-mainMenu(sampleAddress,sampleInput);
-
+mainMenu(sampleAddress, sampleInput);
 
 //Tests:
 // saveList(sampleAddress, sampleInput);
