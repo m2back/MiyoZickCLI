@@ -27,9 +27,11 @@ function openFile(file) {
     default:
       platform = "xdg-open";
   }
-  exec("xdg-open " + file);
+  console.log(`"${platform} ${file}"`);
+  exec(`"${platform} ${file}"`);
 }
 
+/* -----------------------------------Functions-------------------------------------*/
 const saveList = (address, input) => {
   list = configFile;
   if (list[address]) {
@@ -51,8 +53,11 @@ const favRead = (address, input) => {
   list = configFile;
   var favList = {};
   input.forEach((element) => {
-    favList[element] = list[address][element];
+    if (list[address][element].fav === true) {
+      favList[element] = list[address][element];
+    }
   });
+  favList = Object.keys(favList);
   return favList;
 };
 
@@ -70,47 +75,72 @@ const searchMusic = (address, input) => {
   return filtered;
 };
 
-const nestedMenuOptions = [
-  "Nested Option 1",
-  "Nested Option 2",
-  "Nested Option 3",
-];
 
-const menu = (address, list) => {
-  const menuItems = ["Show all Song List", "Show Favorite Songs", "Exit"];
-  const selectedMusicMenu = ["Play Song", "Add to Favorites", "Exit"];
-  term.singleColumnMenu(menuItems, { cancelable: true }, (error, response) => {
+/* -------------------------------------Menus-------------------------------------*/
+const selectedSongMenu = (address,file,list) => {
+  const songMenu = ["Play Song", "Add to favorites", "Back to Main Menu"];
+  term.singleColumnMenu(songMenu,{cancelable:true},(error,response) => {
     if (response.selectedIndex === 0) {
-      console.log("success");
-      term.singleColumnMenu(list, { cancelable: true }, (error, response) => {
-        if (response.selectedIndex !== undefined) {
-          term.singleColumnMenu(
-            selectedMusicMenu,
-            { cancelable: true },
-            (error, response) => {
-              if (response.selectedIndex === 0) {
-                openFile(`${address}/${list[response.selectedIndex]}`);
-                process.exit();
-              }
-            }
-          );
-        }
-        process.exit();
-      });
+      openFile(`${address}/${file}`);
+    }else if (response.selectedIndex === 1){
+      favChange(address,file);
+    }else if(response.selectedIndex === 2) {
+      mainMenu(address,list);
+    }else{
+      process.exit();
     }
-    process.exit();
+  })
+}
+
+const listSongsMenu = (address,list) => {
+  term.singleColumnMenu(list,{cancelable:true},(error, response) => {
+    if (response.selectedIndex !== undefined) selectedSongMenu (address, list[response.selectedIndex],list);
+    else process.exit();
+  })
+}
+
+const listFavSongMenu = (address,list) => {
+  var faveList = favRead(address,list);
+  term.singleColumnMenu(faveList,{cancelable:true},(error,response) => {
+    if (response.selectedIndex !== undefined) selectedSongMenu(address, faveList[response.selectedIndex],list);
+    else process.exit();
+  })
+}
+
+
+const mainMenu = (address,list) => {
+  const menu = ["Show Song List", "Show Favorite Songs", "Serach Songs", "Exit"];
+  term.singleColumnMenu(menu, {cancelable:true}, (error,response)=> {
+    if (response.selectedIndex === 0) listSongsMenu(address,list);
+    else if (response.selectedIndex === 1) listFavSongMenu(address,list);
+    else if (response.selectedIndex === 2) searchMenu(address)  //Search
+    else if (response.selectedIndex === 3) process.exit();
+    else process.exit()
+  })
+}
+
+
+const searchMenu = (address) => {
+  term.green("Write your search term:")
+  term.inputField({cancelable:true},(error, input) => {
+    if (input !== undefined){
+      const searchResult = searchMusic(address,input);
+      console.log(searchResult);
+      listSongsMenu(address,searchResult)
+    }else{
+      process.exit();
+    }
   });
-};
+}
 
-menu2("/home/m2back/tmp/forfar/music_selector/music", [
-  "Aaron May - Cream.mp3",
-  ["sdsadsad.mp3"],
-]);
-// term.cyan( 'What do you want to do?\n' ) ;
 
-let songs = ["Song 1", "Song 2", "Song 3"];
 
-var menus = ["Show all Songs", "Show Favorite Songs", "Exit"];
+// term( 'Please enter your name: ' ) ;
+
+
+
+mainMenu(sampleAddress,sampleInput);
+
 
 //Tests:
 // saveList(sampleAddress, sampleInput);
