@@ -1,7 +1,5 @@
 node_modules/
 music/
-sample*
-delete*
-bak*
 config.json
 audio.mp3
+*.mp3
