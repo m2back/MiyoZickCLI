@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "@bhznjns/node-mp3-player": "^1.3.3",
+    "play-sound": "^1.1.6",
+    "sound-play": "^1.1.0",
     "terminal-kit": "^3.0.1"
   },
   "name": "music_selector",
