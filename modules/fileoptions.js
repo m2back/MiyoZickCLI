@@ -5,8 +5,13 @@ function openFile(file) {
 }
 
 const configJSONFile = "config.json";
-if (!fs.existsSync(configJSONFile)) fs.writeFileSync(configJSONFile, "{}");
+
+if (!fs.existsSync(configJSONFile)) {
+    fs.writeFileSync(configJSONFile, "{}");
+}
+
 var readFile = fs.readFileSync(configJSONFile, "utf8");
+
 if (readFile === "") {
     fs.writeFileSync(configJSONFile, JSON.stringify({}));
     readFile = JSON.stringify({});

@@ -12,19 +12,26 @@ const mainMenu = (address, list) => {
     term.singleColumnMenu(menu, { cancelable: true }, (error, response) => {
         if (response.selectedIndex === 0) {
             listSongsMenu(address, list);
-        } else if (response.selectedIndex === 1) listFavSongMenu(address, list);
-        else if (response.selectedIndex === 2) searchMenu(address,list); //Search
-        else if (response.selectedIndex === 3) process.exit();
-        else process.exit();
+        } else if (response.selectedIndex === 1) {
+            listFavSongMenu(address, list);
+        } else if (response.selectedIndex === 2) {
+            searchMenu(address, list);
+        } else if (response.selectedIndex === 3) {
+            process.exit();
+        } else {
+            process.exit();
+        }
     });
 };
 
 const listSongsMenu = (address, list) => {
     term.clear();
     term.singleColumnMenu(list, { cancelable: true }, (error, response) => {
-        if (response.selectedIndex !== undefined)
+        if (response.selectedIndex !== undefined) {
             selectedSongMenu(address, list[response.selectedIndex], list);
-        else process.exit();
+        } else {
+            process.exit();
+        }
     });
 };
 
@@ -32,9 +39,11 @@ const listFavSongMenu = (address, list) => {
     var faveList = fileOptions.favRead(address, list);
     term.eraseDisplayAbove();
     term.singleColumnMenu(faveList, { cancelable: true }, (error, response) => {
-        if (response.selectedIndex !== undefined)
+        if (response.selectedIndex !== undefined) {
             selectedSongMenu(address, faveList[response.selectedIndex], list);
-        else process.exit();
+        } else {
+            process.exit();
+        }
     });
 };
 
@@ -91,11 +100,10 @@ const selectedSongMenu = (address, file, list) => {
     });
 };
 
-
 module.exports = {
     mainMenu: mainMenu,
     listSongsMenu: listFavSongMenu,
     listFavSongMenu: listFavSongMenu,
     searchMenu: searchMenu,
-    selectedSongMenu:selectedSongMenu
-}
+    selectedSongMenu: selectedSongMenu,
+};
