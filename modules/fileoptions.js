@@ -1,5 +1,5 @@
 const fs = require("fs");
-var player = require('play-sound')(opts = {})
+var player = require("play-sound")((opts = {}));
 function openFile(file) {
     player.play(file);
 }
@@ -8,8 +8,8 @@ const configJSONFile = "config.json";
 if (!fs.existsSync(configJSONFile)) fs.writeFileSync(configJSONFile, "{}");
 var readFile = fs.readFileSync(configJSONFile, "utf8");
 if (readFile === "") {
-  fs.writeFileSync(configJSONFile, JSON.stringify({}));
-  readFile = JSON.stringify({});
+    fs.writeFileSync(configJSONFile, JSON.stringify({}));
+    readFile = JSON.stringify({});
 }
 
 const configFile = JSON.parse(readFile);
@@ -53,10 +53,14 @@ const favChange = (address, input) => {
 
 const searchMusic = (address, input) => {
     list = configFile;
-    const filtered = Object.keys(list[address]).filter((f) =>
-        f.includes(input)
+    let filtered = Object.keys(list[address]).filter((f) =>
+        f.toLowerCase().includes(input.toLowerCase())
     );
-    return filtered;
+    if (filtered.length === 0) {
+        return null;
+    } else {
+        return filtered;
+    }
 };
 
 module.exports = {
@@ -64,5 +68,5 @@ module.exports = {
     saveList: saveList,
     favRead: favRead,
     favChange: favChange,
-    searchMusic: searchMusic
+    searchMusic: searchMusic,
 };
